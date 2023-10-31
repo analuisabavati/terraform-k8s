@@ -35,9 +35,6 @@ Sempre que executamos o Terraform, acabamos criando um arquivo de estado, que gu
 
 A definição desse arquivo está no arquivo backend.tf dentro do diretório de cada ambiente.
 
------------------
----- Draft ------
-
 # Outros tópicos
 
 ### Subindo image no ECR
@@ -48,11 +45,9 @@ A definição desse arquivo está no arquivo backend.tf dentro do diretório de 
 3 - Push on ECR
     docker push 265391989599.dkr.ecr.us-east-1.amazonaws.com/prod:v1
 
-VPC
-Ajuda a separar aplicações com uma camada a mais de isolamento e protege os dados de aplicações, além de permitir uma proteção extra para a aplicação, ao utilizar redes privadas.
+### VPC
+Ajuda a separar aplicações com uma camada a mais de isolamento e protege os dados de aplicações, além de permitir uma proteção extra para a aplicação, ao utilizar redes privadas. Na nossa região vamos ter que ter um internet-gateway para podermos acessar a internet para poder receber requisições e responder as requisições. Vamos ter a nossa zona de disponibilidade e dentro delas vamos ter a rede pública com o load balancer e o NAT-gateway e a rede privada que vamos ter as instâncias rodando a nossa aplicação Docker.
 
-na nossa região vamos ter que ter um internet-gateway para podermos acessar a internet para poder receber requisições e responder as requisições. Vamos ter a nossa zona de disponibilidade e dentro delas vamos ter a rede pública com o load balancer e o NAT-gateway e a rede privada que vamos ter as instâncias rodando a nossa aplicação Docker.
-
-Grupo de segurança
+### Grupo de segurança
 Podemos filtrar as portas e direcionar as requisições para a aplicação, já que sem o nosso grupo de segurança a aplicação que foi desenvolvida não poder ser acessada.
 E como o projeto consiste de duas subnets, uma privada e uma pública, precisamos de dois grupos de segurança um para cada rede
