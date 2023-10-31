@@ -12,6 +12,10 @@ https://docs.aws.amazon.com/pt_br/cli/latest/userguide/getting-started-install.h
 
 Depois de instalado você pode configurar a AWS usando o comando aws configure, onde será requisitado a chave secreta (secret key), que pode ser criada nessa pagina (https://us-east-1.console.aws.amazon.com/iam/home?region=us-east-1#/security_credentials) clicando em “criar chave de acesso” na aba “credenciais do AWS IAM”.
 
+#  Abrir e rodar o projeto
+O projeto foi desenvolvido no VSC (Visual Studio Code), sendo assim, instale o VSC (pode ser uma versão mais recente) e, na tela inicial, procure a opção extensões, ou aperte Ctrl+Shift+X, e busque por HashiCorp Terraform, assim teremos o suporte do intellisense, tornando o trabalho de escrever o código mais rápido.
+
+Vá até a paste a abra a pasta do projeto. Após abrir o projeto abra um terminal, pode ser o integrado com o VSC, navegue até a pasta env/Prod e execute o comando terraform init dentro dela, agora temos o Terraform iniciado e podemos começar a utilizá-lo. Para criar a infraestrutura, execute o terraform apply na pastas de Produção (env/Prod).
 
 # Decisões tomadas
 
@@ -27,12 +31,28 @@ Para os ambientes, ou "environments", utilizaremos a pasta "env". Para infraestr
 Subimos a infa por ambientes em vez de subir dentro da pasta infra porque assim não precisamos forncer todos os valores das variáveis que declaramos e ao executar o terraform destruct podemos ter um problema com a destruição de coisas não planejadas ou acabamos não tendo a destruição de toda a infra que criamos.
 
 ### Arquivo de estado
-Contexto: Sempre que executamos o Terraform, acabamos criando um arquivo de estado, que guarda todo o estado da nossa infraestrutura para podermos comparar qual estado que queremos que a nossa infraestrutura tenha com qual ela realmente tem, para podermos criar o que está faltando nela. E para podermos executar o Terraform em qualquer máquina, é interessante guardarmos esse arquivo em um local que possa ser facilmente acessado. Nesse caso, vamos guardá-lo no S3 da AWS, assim, ele fica disponível para nossa conta e não vamos perdê-lo caso troquemos de máquina, por exemplo. Também é muito interessante fazermos isso, porque, como a maioria das rotinas de entrega contínua é executada dentro de containers docker, elas não salvam nenhum tipo de arquivo local, então salvar o estado em um serviço de cloud é benéfico.
+Sempre que executamos o Terraform, acabamos criando um arquivo de estado, que guarda todo o estado da  infraestrutura para podermos comparar qual estado que queremos que a infraestrutura tenha com qual ela realmente tem, para podermos criar o que está faltando nela. E para podermos executar o Terraform em qualquer máquina, é interessante guardarmos esse arquivo em um local que possa ser facilmente acessado. Nesse caso, vamos guardá-lo no S3 da AWS, assim, ele fica disponível para a conta usada pelo grupo e não vamos perdê-lo caso troquemos de máquina, por exemplo. Também é muito interessante fazermos isso, porque, como a maioria das rotinas de entrega contínua é executada dentro de containers docker, elas não salvam nenhum tipo de arquivo local, então salvar o estado em um serviço de cloud é benéfico.
 
-Nome do bucket: terraform-state-postech-grupo7
+A definição desse arquivo está no arquivo backend.tf dentro do diretório de cada ambiente.
 
+-----------------
+---- Draft ------
 
----- Draft
+# Outros tópicos
 
-Permissionamento aditivo:  O tipo de permissionamento mais usado e recomendado hoje em dia é o aditivo, onde só damos as permissões conforme necessário e apenas o mínimo essencial.
-Role: 
+### Subindo image no ECR
+1 - Login: 
+    aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 265391989599.dkr.ecr.us-east-1.amazonaws.com/events 
+2 - Add tag
+    docker tag 7aebeb444bf2 265391989599.dkr.ecr.us-east-1.amazonaws.com/prod:v1
+3 - Push on ECR
+    docker push 265391989599.dkr.ecr.us-east-1.amazonaws.com/prod:v1
+
+VPC
+Ajuda a separar aplicações com uma camada a mais de isolamento e protege os dados de aplicações, além de permitir uma proteção extra para a aplicação, ao utilizar redes privadas.
+
+na nossa região vamos ter que ter um internet-gateway para podermos acessar a internet para poder receber requisições e responder as requisições. Vamos ter a nossa zona de disponibilidade e dentro delas vamos ter a rede pública com o load balancer e o NAT-gateway e a rede privada que vamos ter as instâncias rodando a nossa aplicação Docker.
+
+Grupo de segurança
+Podemos filtrar as portas e direcionar as requisições para a aplicação, já que sem o nosso grupo de segurança a aplicação que foi desenvolvida não poder ser acessada.
+E como o projeto consiste de duas subnets, uma privada e uma pública, precisamos de dois grupos de segurança um para cada rede
