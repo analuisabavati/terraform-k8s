@@ -38,12 +38,24 @@ A definição desse arquivo está no arquivo backend.tf dentro do diretório de 
 # Outros tópicos
 
 ### Subindo image no ECR
+
 1 - Login: 
+
+```
     aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 265391989599.dkr.ecr.us-east-1.amazonaws.com/events 
+```
+
 2 - Add tag
+
+```
     docker tag 7aebeb444bf2 265391989599.dkr.ecr.us-east-1.amazonaws.com/prod:v1
+```
+
 3 - Push on ECR
+
+```
     docker push 265391989599.dkr.ecr.us-east-1.amazonaws.com/prod:v1
+```
 
 ### VPC
 Ajuda a separar aplicações com uma camada a mais de isolamento e protege os dados de aplicações, além de permitir uma proteção extra para a aplicação, ao utilizar redes privadas. Na nossa região vamos ter que ter um internet-gateway para podermos acessar a internet para poder receber requisições e responder as requisições. Vamos ter a nossa zona de disponibilidade e dentro delas vamos ter a rede pública com o load balancer e o NAT-gateway e a rede privada que vamos ter as instâncias rodando a nossa aplicação Docker.
