@@ -25,8 +25,6 @@ Vá até a paste a abra a pasta do projeto. Após abrir o projeto abra um termin
 ### Provider
 Um provedor é uma maneira de se comunicar com alguma ferramenta externa, podendo ser a AWS, o Google, o Kubernetes ou uma API que aceite requisições HTTP. Nesse projeto utilizaremos dos provedores simultaneamente, a AWS, que provê a infraestrutura e o Kubernetes, que a configura para a aplicação.
 
-Região da AWS: us-east-1
-
 ### Organização de arquivos
 
 Para os ambientes, ou "environments", utilizaremos a pasta "env". Para infraestrutura, utilizaremos a pasta "infra". Assim, manteremos os arquivos separados reutilizando a infraestrutura independentemente do ambiente.
