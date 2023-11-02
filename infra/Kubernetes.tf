@@ -1,31 +1,34 @@
 resource "kubernetes_deployment" "Fastfoodapi" {
   metadata {
-    name = "fastfoodapi-pod"
+    name = "fastfoodapi"
     labels = {
-      nome = "fastfoodapi-pod"
+      name = "fastfoodapi"
     }
   }
 
   spec {
-    replicas = 3
+    replicas = 1
 
     selector {
       match_labels = {
-        nome = "fastfoodapi-pod"
+        name = "fastfoodapi"
       }
     }
 
     template {
       metadata {
         labels = {
-          nome = "fastfoodapi-pod"
+          name = "fastfoodapi"
         }
       }
 
       spec {
         container {
           image = "265391989599.dkr.ecr.us-east-1.amazonaws.com/prod:v1"
-          name  = "fastfoodapi-pod"
+          name  = "fastfoodapi"
+          port {
+            container_port = 8000
+          }
 
           resources {
             limits = {
@@ -38,15 +41,15 @@ resource "kubernetes_deployment" "Fastfoodapi" {
             }
           }
 
-          liveness_probe {
-            http_get {
-              path = "/"
-              port = 80
-            }
+          # liveness_probe {
+          #   http_get {
+          #     path = "/"
+          #     port = 80
+          #   }
 
-            initial_delay_seconds = 3
-            period_seconds        = 5
-          }
+          #   initial_delay_seconds = 3
+          #   period_seconds        = 5
+          # }
         }
       }
     }

@@ -18,14 +18,12 @@ O projeto foi desenvolvido no VSC (Visual Studio Code), sendo assim, instale o V
 Vá até a paste a abra a pasta do projeto. Após abrir o projeto abra um terminal, pode ser o integrado com o VSC, navegue até a pasta env/Prod e execute o comando `terraform init` dentro dela, agora temos o Terraform iniciado e podemos começar a utilizá-lo. Para criar a infraestrutura, execute o `terraform apply` na pastas de Produção (env/Prod).
 
 # Representação da Infraestrutura
-![Infra](/doc/img/infra.png)
+![Infra](/docs/img/infra.png)
 
 # Decisões tomadas
 
 ### Provider
 Um provedor é uma maneira de se comunicar com alguma ferramenta externa, podendo ser a AWS, o Google, o Kubernetes ou uma API que aceite requisições HTTP. Nesse projeto utilizaremos dos provedores simultaneamente, a AWS, que provê a infraestrutura e o Kubernetes, que a configura para a aplicação.
-
-Região da AWS: us-east-1
 
 ### Organização de arquivos
 
